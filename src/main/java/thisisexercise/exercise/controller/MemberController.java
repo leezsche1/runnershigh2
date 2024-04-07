@@ -58,7 +58,7 @@ public class MemberController {
     public ResponseEntity idCheck(@RequestBody @Valid MemberIdCheckDTO memberIdCheckDTO, BindingResult bindingResult) throws CustomValidationException {
 
         if (memberService.checkId(memberIdCheckDTO.getEmail())) {
-            ;
+
 
             return ResponseEntity.status(HttpStatus.OK).body(new CommonResDTO<>("1", "사용가능합니다.", null));
         } else {

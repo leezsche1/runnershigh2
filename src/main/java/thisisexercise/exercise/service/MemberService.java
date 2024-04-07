@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import thisisexercise.exercise.domain.Member;
 import thisisexercise.exercise.domain.MemberRole;
 import thisisexercise.exercise.domain.Role;
+import thisisexercise.exercise.handler.CustomExceptionCode;
+import thisisexercise.exercise.handler.CustomValidationException;
 import thisisexercise.exercise.repository.MemberRepository;
 import thisisexercise.exercise.repository.RoleRepository;
 
@@ -27,12 +29,11 @@ public class MemberService {
 
     @Transactional
     public Member save(Member member) {
-        Optional<Role> roleOpt = roleRepository.findByRole("ROLE_USER");
-        Role role = roleOpt.get();
+        Role roleUser = roleRepository.findByRole("ROLE_USER").orElseThrow(() -> new CustomValidationException(CustomExceptionCode.LOGIN_FAIL));
 
         MemberRole memberRole = new MemberRole();
         memberRole.setMember(member);
-        memberRole.setRole(role);
+        memberRole.setRole(roleUser);
 
         member.addMemberRole(memberRole);
         return memberRepository.save(member);
